@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/MBP/Documents/Temp/chap6/classes/Symbol.zip"/>
-	<classpathentry kind="lib" path="/Users/MBP/Documents/Temp/chap6/classes/Semant.zip"/>
-	<classpathentry kind="lib" path="/Users/MBP/Documents/Temp/chap6/classes/ErrorMsg.zip"/>
-	<classpathentry kind="lib" path="/Users/MBP/Documents/Temp/chap6/classes/Absyn.zip"/>
-	<classpathentry kind="lib" path="/Users/MBP/Documents/Temp/chap6/classes/Types.zip"/>
-	<classpathentry kind="lib" path="/Users/MBP/Documents/Temp/chap6/classes/Parse.zip"/>
+	<classpathentry kind="lib" path="/Users/jack/Dev/Temp/chap6/Absyn.zip"/>
+	<classpathentry kind="lib" path="/Users/jack/Dev/Temp/chap6/ErrorMsg.zip"/>
+	<classpathentry kind="lib" path="/Users/jack/Dev/Temp/chap6/Parse.zip"/>
+	<classpathentry kind="lib" path="/Users/jack/Dev/Temp/chap6/Semant.zip"/>
+	<classpathentry kind="lib" path="/Users/jack/Dev/Temp/chap6/Symbol.zip"/>
+	<classpathentry kind="lib" path="/Users/jack/Dev/Temp/chap6/Types.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
