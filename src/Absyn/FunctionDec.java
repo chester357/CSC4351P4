@@ -1,6 +1,8 @@
 package Absyn;
 import Symbol.Symbol;
 public class FunctionDec extends Dec {
+	//You’ll need to initialize the escape fields to
+	//false instead of true and the leaf field to true instead of false.
   public Symbol name;
   public FieldList params;
   public NameTy result;		/* optional */
@@ -10,6 +12,6 @@ public class FunctionDec extends Dec {
 		     FunctionDec x) {
     pos=p; name=n; params=a; result=r; body=b; next=x;
   }
-  public boolean leaf = false;
+  public boolean leaf = true;
   public Semant.FunEntry entry;
 }
