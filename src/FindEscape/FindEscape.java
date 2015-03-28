@@ -26,9 +26,11 @@ public class FindEscape {
 	  else if (v instanceof Absyn.SimpleVar){
 		  Absyn.SimpleVar temp = (Absyn.SimpleVar) v;
 		  Escape esc = (Escape) escEnv.get(temp.name);
-		  int escapeDepth = esc.depth;
-		  if (escapeDepth < depth){
-			  esc.setEscape();
+		  if (depth > 0){
+			  int escapeDepth = esc.depth;
+			  if (escapeDepth < depth){
+				  esc.setEscape();
+			  }
 		  }
 	  }
   }
@@ -113,7 +115,6 @@ public class FindEscape {
 		  for (Absyn.FunctionDec fd = temp; fd != null; fd = fd.next){
 			  isLeaf = true;
 			  escEnv.beginScope();
-			  traverseExp(depth + 1, fd.body);
 			  if (!isLeaf){
 				  fd.leaf = false;
 				  isLeaf = true;
@@ -122,6 +123,7 @@ public class FindEscape {
 			  for (Absyn.FieldList fl = fd.params; fl != null; fl = fl.tail){
 				  escEnv.put(fl.name, new FormalEscape(depth + 1, fl));
 			  }
+			  traverseExp(depth + 1, fd.body);
 			  escEnv.endScope();
 		  }		
 	  }

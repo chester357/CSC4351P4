@@ -1,9 +1,14 @@
 package Semant;
 
+import Absyn.FieldList;
 import Translate.Exp;
 import Types.Type;
 import java.util.Hashtable;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Util;
+
 import Translate.Level;
+import Util.BoolList;
 
 public class Semant {
 	Env env;
@@ -37,7 +42,7 @@ public class Semant {
 		
 		// Allocate a new level for translation of the program body, BEFORE the call
 		// the transExp
-		level = new Translate.Level(level, Symbol.Symbol.symbol(""), null);
+		level = new Translate.Level(level, Symbol.Symbol.symbol("TigerMain"), null);
 		
 		transExp(exp);
 	}
@@ -428,22 +433,39 @@ public class Semant {
 		return null;
 	}
 
+	BoolList buildBoolList(Absyn.FieldList fl){
+		if (fl == null)
+			return null;
+		if (fl.escape)
+			return new BoolList(true, buildBoolList(fl.tail));
+		else 
+			return new BoolList(false, buildBoolList(fl.tail));
+	}
+	
 	Exp transDec(Absyn.FunctionDec d) {
 		// 1st pass - handles the function headers
 		Hashtable hash = new Hashtable();
 		for (Absyn.FunctionDec f = d; f != null; f = f.next) {
+			// Similarly, when constructing an entry for a function you must 
+			// first construct a new level for it with information as to 
+			// which parameters to the function escape, before constructing 
+			// the function entry with the new level. Naturally, the function 
+			// body must be translated in this new function level
+			
+			Level funLevel = new Level(level, f.name, buildBoolList(f.params), f.leaf);
+			
 			if (hash.put(f.name, f.name) != null)
 				error(f.pos, "function redeclared");
 			Types.RECORD fields = transTypeFields(new Hashtable(), f.params);
 			Type type = transTy(f.result);
-			f.entry = new FunEntry(fields, type);
+			f.entry = new FunEntry(funLevel, fields, type);
 			env.venv.put(f.name, f.entry);
 		}
 		// 2nd pass - handles the function bodies
 		for (Absyn.FunctionDec f = d; f != null; f = f.next) {
 			env.venv.beginScope();
 			// Might be f.entry.level.formals
-			putTypeFields(f.entry.formals, f.entry.level.frameFormals);
+			putTypeFields(f.entry.formals, f.entry.level.formals);
 			Semant fun = new Semant(env, f.entry.level);
 			ExpTy body = fun.transExp(f.body);
 			if (!body.ty.coerceTo(f.entry.result))
